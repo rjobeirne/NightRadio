@@ -7,11 +7,16 @@ import android.os.Bundle;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener  {
 
     private MediaPlayer mediaPlayer;
+    public ExoPlayer player;
     private String url, urlMel, urlRN;
     Boolean flagPaused = true;
 
@@ -23,7 +28,11 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
         urlMel = "http://live-radio01.mediahubaustralia.com/3LRW/mp3";
         urlRN = "http://live-radio01.mediahubaustralia.com/2RNW/mp3";
 
-        mediaPlayer = new MediaPlayer();
+//        mediaPlayer = new MediaPlayer();
+        player = new ExoPlayer.Builder(this)
+        .setMediaSourceFactory(
+            new DefaultMediaSourceFactory(this).setLiveTargetOffsetMs(5000))
+                .build();
 
         final ToggleButton btnMel = (ToggleButton)findViewById(R.id.play_mel);
         final ToggleButton btnRN = (ToggleButton)findViewById(R.id.play_rn);
@@ -72,27 +81,28 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
     }
 
     public void playRadio(String url) {
-        try {
-            mediaPlayer.reset();
-            mediaPlayer.setDataSource(url);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
+        MediaItem mediaItem = new MediaItem.Builder()
+                .setUri(url)
+                .setLiveConfiguration(
+                    new MediaItem.LiveConfiguration.Builder()
+                        .setMaxPlaybackSpeed(1.02f)
+                        .build())
+                .build();
+        player.setMediaItem(mediaItem);
+        player.prepare();
+        player.play();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void pauseRadio() {
-       if(mediaPlayer!=null) {
-           mediaPlayer.pause();
+       if(player!=null) {
+           player.pause();
        }
     }
 
     public void stopPlaying() {
-        if(mediaPlayer!=null){
-            mediaPlayer.stop();
-            mediaPlayer.reset();
+        if(player!=null){
+            player.stop();
         }
     }
     @Override
