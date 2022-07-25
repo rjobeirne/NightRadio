@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -13,12 +14,13 @@ import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener  {
+public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     public ExoPlayer player;
     private String url, urlMel, urlRN;
     Boolean flagPaused = true;
+    int sleepTimer = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
         player.setMediaItem(mediaItem);
         player.prepare();
         player.play();
+        SleepTimer();
 
     }
 
@@ -105,14 +108,22 @@ public class MainActivity extends AppCompatActivity implements MediaPlayer.OnCom
             player.stop();
         }
     }
-    @Override
-    public void onBackPressed() {
-        stopPlaying();
-        finish();
+
+    public void SleepTimer() {
+        new CountDownTimer(sleepTimer * 1000, 1000) {
+             public void onTick(long millisUntilFinished) {
+             }
+             public void onFinish() {
+                 stopPlaying();
+             }
+         }.start();
     }
 
-    @Override
-    public void onCompletion(MediaPlayer mp) {
+    // Only required for reader app
+//    @Override
+//    public void onBackPressed() {
+//        stopPlaying();
+//        finish();
+//    }
 
-    }
 }
