@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     Boolean flagPaused = true;
     Boolean flagPlaying = false;
     int sleepTimer = 45;  // minutes
+    TextView mNowPlayingShowText;
+    String nameShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         View mNowPlayingLogo = findViewById(R.id.now_playing);
         TextView mNowPlayingText = findViewById(R.id.now_playing_text);
+        mNowPlayingShowText = findViewById(R.id.now_playing_text_show);
 
         final ToggleButton btnMel = findViewById(R.id.play_mel);
         final ToggleButton btnRN = findViewById(R.id.play_rn);
@@ -147,11 +150,15 @@ public class MainActivity extends AppCompatActivity {
         // load data file
         FFmpegMediaMetadataRetriever metaRetriever = new FFmpegMediaMetadataRetriever();
         metaRetriever.setDataSource(url);
-        String nameShow = metaRetriever.extractMetadata(String.valueOf(FFmpegMediaMetadataRetriever.METADATA_KEY_AUDIO_CODEC));
-        if(nameShow == null) {
-            nameShow = "Nothing";
+        String icyMeta = metaRetriever.extractMetadata
+                (String.valueOf(FFmpegMediaMetadataRetriever.METADATA_KEY_ICY_METADATA));
+        if(icyMeta != null) {
+            nameShow = icyMeta.substring(icyMeta.indexOf("='") + 2,icyMeta.indexOf("';"));
+            Log.e("name show", nameShow);
+        } else {
+            nameShow = null;
         }
-        Log.e("name show", nameShow);
+        mNowPlayingShowText.setText(nameShow);
         SleepTimer();
 
     }

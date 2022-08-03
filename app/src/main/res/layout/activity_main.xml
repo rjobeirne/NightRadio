@@ -83,16 +83,28 @@
     <TextView
         android:id="@+id/now_playing_text"
         android:layout_width="160dp"
-        android:layout_height="64dp"
+        android:layout_height="32dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Now Playing"
+        android:text="Select a station"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@id/now_playing"
+        app:layout_constraintBottom_toTopOf="@id/now_playing_text_show"
         app:layout_constraintEnd_toStartOf="@id/play_button"
         app:layout_constraintStart_toEndOf="@id/now_playing"
         app:layout_constraintTop_toTopOf="@id/now_playing" />
 
+
+    <TextView
+        android:id="@+id/now_playing_text_show"
+        android:layout_width="160dp"
+        android:layout_height="32dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@id/now_playing"
+        app:layout_constraintEnd_toStartOf="@id/play_button"
+        app:layout_constraintStart_toEndOf="@id/now_playing"
+        app:layout_constraintTop_toBottomOf="@id/now_playing_text" />
 
     <ToggleButton
         android:id="@+id/play_button"
