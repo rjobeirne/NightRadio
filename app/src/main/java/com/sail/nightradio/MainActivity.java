@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -16,6 +17,8 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 
 import java.io.IOException;
+
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -140,6 +143,15 @@ public class MainActivity extends AppCompatActivity {
         player.prepare();
         player.play();
         flagPlaying = true;
+
+        // load data file
+        FFmpegMediaMetadataRetriever metaRetriever = new FFmpegMediaMetadataRetriever();
+        metaRetriever.setDataSource(url);
+        String nameShow = metaRetriever.extractMetadata(String.valueOf(FFmpegMediaMetadataRetriever.METADATA_KEY_AUDIO_CODEC));
+        if(nameShow == null) {
+            nameShow = "Nothing";
+        }
+        Log.e("name show", nameShow);
         SleepTimer();
 
     }
