@@ -168,11 +168,10 @@ public class MainActivity extends AppCompatActivity {
          }.start();
     }
 
-    // Only required for reader app
-//    @Override
-//    public void onBackPressed() {
-//        stopPlaying();
-//        finish();
-//    }
+    @Override
+    public void onBackPressed() {
+        stopPlaying();
+        finish();
+    }
 
 }
