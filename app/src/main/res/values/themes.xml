@@ -28,5 +28,12 @@
 
     </style>
 
+    <style name="SettingsTheme.NoActionBar" parent="Theme.AppCompat">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">#EEEEEE</item>
+        <item name="android:background">#000000</item>
+    </style>
+
 
 </resources>
