@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
         sleepTimer = Integer.parseInt(sharedPreferences.getString("prefs_listen_time", "45"));
     }
 
-
     public void playRadio(String url) {
         MediaItem mediaItem = new MediaItem.Builder()
                 .setUri(url)
@@ -192,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         if(icyMeta != null) {
             nameShow = icyMeta.substring(icyMeta.indexOf("='") + 2,icyMeta.indexOf("';"));
             Log.e("name show", nameShow);
+            Log.e("sleep timer", String.valueOf(sleepTimer) + " mins");
         } else {
             nameShow = null;
         }

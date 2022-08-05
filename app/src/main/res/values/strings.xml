@@ -5,7 +5,7 @@
 
     <string name="prefs_listen_time">prefs_listen_time</string>
     <string name="listen_time_desc">Radio will cut-out after this time</string>
-    <string name="listen_time">Radio sleep time</string>
+    <string name="listen_time">Radio sleep time (minutes)</string>
     <string name="prefs_chapter_length">prefs_chapter_length</string>
     <string name="chapter_length_desc">More chapters will be read if the time is less than this</string>
     <string name="chapter_length">Preferred chapter length</string>
