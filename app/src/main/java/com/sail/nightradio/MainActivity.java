@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_melbourne);
-                mNowPlayingText.setText("ABC Radio Melbourne");
+                mNowPlayingText.setText("ABC Radio 774");
                 url = urlMel;
                 if (flagPlaying){
                     stopPlaying();

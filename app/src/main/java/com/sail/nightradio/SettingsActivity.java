@@ -42,18 +42,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             androidx.preference.EditTextPreference editTextPreference1 =
                     getPreferenceManager().findPreference("prefs_listen_time");
-            androidx.preference.EditTextPreference editTextPreference2 =
-                    getPreferenceManager().findPreference("prefs_chapter_length");
 
             editTextPreference1.setOnBindEditTextListener(
-                    new androidx.preference.EditTextPreference.OnBindEditTextListener() {
-                @Override
-                public void onBindEditText(@NonNull EditText editText) {
-                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                }
-            });
-
-            editTextPreference2.setOnBindEditTextListener(
                     new androidx.preference.EditTextPreference.OnBindEditTextListener() {
                 @Override
                 public void onBindEditText(@NonNull EditText editText) {

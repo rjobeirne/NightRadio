@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <PreferenceCategory android:title="Boat">
+        <PreferenceCategory android:title="Settings">
 
                 <EditTextPreference
                     android:key="@string/prefs_listen_time"
@@ -9,13 +9,7 @@
                     android:title="@string/listen_time"
                     android:defaultValue="45" />
 
-                <EditTextPreference
-                    android:key="@string/prefs_chapter_length"
-                    android:summary="@string/chapter_length_desc"
-                    android:title="@string/chapter_length"
-                    android:defaultValue="15" />
-
-        </PreferenceCategory>
+         </PreferenceCategory>
 
         <PreferenceCategory android:title="Reset">
         <Preference android:title="Restore default values"
