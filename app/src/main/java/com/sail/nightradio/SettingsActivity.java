@@ -54,6 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
             button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    button.setIcon(R.drawable.restore_grey);
                     restoreDefaultSettings();
                     return false;
                 }
