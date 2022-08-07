@@ -3,6 +3,11 @@
 
         <PreferenceCategory android:title="Settings">
 
+                <SwitchPreference
+                    android:defaultValue="true"
+                    android:key="@string/prefs_sleep_function"
+                    android:title="@string/sleep_function" />
+
                 <EditTextPreference
                     android:key="@string/prefs_listen_time"
                     android:summary="@string/listen_time_desc"

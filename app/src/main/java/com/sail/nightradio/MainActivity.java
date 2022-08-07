@@ -9,9 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,22 +19,22 @@ import android.widget.ToggleButton;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 import java.io.IOException;
 
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     public ExoPlayer player;
     private String url, urlMel, urlRN, urlRRR, urlPBS;
-    Boolean flagPaused = true;
     Boolean flagPlaying = false;
     int sleepTimer = 45;  // minutes
     TextView mNowPlayingShowText;
     String nameShow;
     private ImageButton settingsBtn;
+    Boolean sleepFunction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         // Get settings from preferences
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sleepFunction = sharedPreferences.getBoolean("prefs_sleep_function",Boolean.parseBoolean("TRUE"));
         sleepTimer = Integer.parseInt(sharedPreferences.getString("prefs_listen_time", "45"));
     }
 
@@ -190,14 +189,13 @@ public class MainActivity extends AppCompatActivity {
                 (String.valueOf(FFmpegMediaMetadataRetriever.METADATA_KEY_ICY_METADATA));
         if(icyMeta != null) {
             nameShow = icyMeta.substring(icyMeta.indexOf("='") + 2,icyMeta.indexOf("';"));
-            Log.e("name show", nameShow);
-            Log.e("sleep timer", String.valueOf(sleepTimer) + " mins");
         } else {
             nameShow = null;
         }
         mNowPlayingShowText.setText(nameShow);
-        SleepTimer();
-
+        if (sleepFunction) {
+            SleepTimer();
+        }
     }
 
     public void pauseRadio() {
@@ -230,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-
     public void shortClick() {
         Toast toast = Toast.makeText(this, "Long click to get to Settings", Toast.LENGTH_LONG);
         View view = toast.getView();
@@ -240,6 +237,4 @@ public class MainActivity extends AppCompatActivity {
         text.setTextColor(Color.parseColor("#FFFFFF"));
         toast.show();
     }
-
-
 }
