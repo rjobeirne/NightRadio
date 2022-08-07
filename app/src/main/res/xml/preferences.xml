@@ -17,7 +17,7 @@
          </PreferenceCategory>
 
         <PreferenceCategory android:title="Reset">
-        <Preference android:title="Restore default values"
+        <Preference android:title="@string/restore_defaults"
             android:summary=""
             android:key="@string/restore_defaults"/>
         </PreferenceCategory>

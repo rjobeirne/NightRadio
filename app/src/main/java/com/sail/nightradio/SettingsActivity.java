@@ -2,12 +2,11 @@ package com.sail.nightradio;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.widget.EditText;
 import androidx.preference.PreferenceFragmentCompat;
-
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,6 +49,23 @@ public class SettingsActivity extends AppCompatActivity {
                     editText.setInputType(InputType.TYPE_CLASS_NUMBER);
                 }
             });
+
+            Preference button = findPreference(getString(R.string.restore_defaults));
+            button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    restoreDefaultSettings();
+                    return false;
+                }
+            });
+        }
+
+        private void restoreDefaultSettings() {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.clear();
+            editor.apply();
+            PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, true);
         }
 
         @Override
