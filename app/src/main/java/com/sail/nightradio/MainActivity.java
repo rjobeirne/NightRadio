@@ -18,10 +18,13 @@ import android.widget.ToggleButton;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -182,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
         player.prepare();
         player.play();
         flagPlaying = true;
+        fadeOut = true;
+        SleepTimer();
 
         // load data file
         FFmpegMediaMetadataRetriever metaRetriever = new FFmpegMediaMetadataRetriever();
@@ -218,7 +223,8 @@ public class MainActivity extends AppCompatActivity {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
-                 stopPlaying();
+                 startFadeOut();
+                 fadeOut = true;
              }
          }.start();
     }
@@ -228,6 +234,54 @@ public class MainActivity extends AppCompatActivity {
         stopPlaying();
         finish();
     }
+
+    public void startFadeOut(){
+
+        // The duration of the fade
+        final int FADE_DURATION = 3000;
+
+        // The amount of time between volume changes. The smaller this is, the smoother the fade
+        final int FADE_INTERVAL = 250;
+
+        // Calculate the number of fade steps
+        int numberOfSteps = FADE_DURATION / FADE_INTERVAL;
+
+        // Calculate by how much the volume changes each step
+        final float deltaVolume = volume / numberOfSteps;
+
+        // Create a new Timer and Timer task to run the fading outside the main UI thread
+        final Timer timer = new Timer(true);
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                //Do a fade step
+                fadeOutStep(deltaVolume);
+
+                //Cancel and Purge the Timer if the desired volume has been reached
+                if(volume <= 0){
+                    timer.cancel();
+                    timer.purge();
+                    stopPlaying();
+                }
+            }
+        };
+
+        timer.schedule(timerTask,FADE_INTERVAL,FADE_INTERVAL);
+    }
+
+    private void fadeOutStep(float deltaVolume){
+        player.setVolume(volume);
+        volume -= deltaVolume;
+    }
+
+
+    // Only required for reader app
+//    @Override
+//    public void onBackPressed() {
+//        stopPlaying();
+//        finish();
+//    }
 
     public void shortClick() {
         Toast toast = Toast.makeText(this, "Long click to get to Settings", Toast.LENGTH_LONG);
