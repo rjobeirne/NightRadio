@@ -33,11 +33,14 @@ public class MainActivity extends AppCompatActivity {
     public ExoPlayer player;
     private String url, urlMel, urlRN, urlRRR, urlPBS;
     Boolean flagPlaying = false;
+    Boolean fadeOut = false;
     int sleepTimer = 45;  // minutes
     TextView mNowPlayingShowText;
     String nameShow;
     private ImageButton settingsBtn;
     Boolean sleepFunction;
+    float volume = 1;
+    float deltaVolume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
