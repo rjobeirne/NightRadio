@@ -29,7 +29,6 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
     public ExoPlayer player;
     private String url, urlMel, urlRN, urlRRR, urlPBS;
     Boolean flagPlaying = false;
@@ -222,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SleepTimer() {
-        new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
+        new CountDownTimer(sleepTimer * 1 * 1000, 1000) {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
@@ -259,7 +258,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
 
                 //Do a fade step
-                fadeOutStep(deltaVolume);
+//                fadeOutStep(deltaVolume);
+        player.setVolume(volume);
+        volume -= deltaVolume;
 
                 //Cancel and Purge the Timer if the desired volume has been reached
                 if(volume <= 0){
