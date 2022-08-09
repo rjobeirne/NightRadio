@@ -8,7 +8,10 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Boolean sleepFunction;
     float volume = 1;
     float deltaVolume;
+    ToggleButton btnPlayStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         final ToggleButton btnRN = findViewById(R.id.play_rn);
         final ToggleButton btnRRR = findViewById(R.id.play_rrr);
         final ToggleButton btnPBS = findViewById(R.id.play_pbs);
-        final ToggleButton btnPlayStop = findViewById(R.id.play_button);
+        btnPlayStop = findViewById(R.id.play_button);
 
         settingsBtn = findViewById(R.id.button_settings);
 
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
         if(player!=null){
             player.stop();
             flagPlaying = false;
+            btnPlayStop.setBackgroundResource(R.drawable.outline_play_circle_24);
         }
     }
 
@@ -225,8 +230,33 @@ public class MainActivity extends AppCompatActivity {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
-                 startFadeOut();
+//                 startFadeOut();
                  fadeOut = true;
+                 deltaVolume = (float) 0.33;
+                 Log.e("initial **", String.valueOf(volume));
+                 new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                     @Override
+                     public void run() {
+                         Log.e("Delay **", String.valueOf(volume));
+                         volume -= deltaVolume;
+                         player.setVolume(volume);
+                         new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                             @Override
+                             public void run() {
+                                 Log.e("Delay2 **", String.valueOf(volume));
+                                 new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                                     @Override
+                                     public void run() {
+                                         Log.e("Delay3 **", String.valueOf(volume));
+                                         stopPlaying();
+                                         volume = 1;
+                                         player.setVolume(volume);
+                                     }
+                                 }, 2000);
+                             }
+                         }, 2000);
+                     }
+                 }, 2000);
              }
          }.start();
     }
