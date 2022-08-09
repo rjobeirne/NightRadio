@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     public ExoPlayer player;
     private String url, urlMel, urlRN, urlRRR, urlPBS;
     Boolean flagPlaying = false;
-    Boolean fadeOut = false;
     int sleepTimer = 45;  // minutes
     TextView mNowPlayingShowText;
     String nameShow;
@@ -191,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
         player.prepare();
         player.play();
         flagPlaying = true;
-        fadeOut = true;
         SleepTimer();
 
         // load data file
@@ -226,12 +224,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SleepTimer() {
-        new CountDownTimer(sleepTimer * 1 * 1000, 1000) {
+        new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
 //                 startFadeOut();
-                 fadeOut = true;
                  deltaVolume = (float) 0.25;
                  Log.e("initial **", String.valueOf(volume));
                  new Handler(Looper.myLooper()).postDelayed(new Runnable() {
