@@ -232,14 +232,14 @@ public class MainActivity extends AppCompatActivity {
              public void onFinish() {
 //                 startFadeOut();
                  fadeOut = true;
-                 deltaVolume = (float) 0.33;
+                 deltaVolume = (float) 0.25;
                  Log.e("initial **", String.valueOf(volume));
                  new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                      @Override
                      public void run() {
-                         Log.e("Delay **", String.valueOf(volume));
                          volume -= deltaVolume;
                          player.setVolume(volume);
+                         Log.e("Delay **", String.valueOf(volume));
                          new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                              @Override
                              public void run() {
@@ -247,10 +247,18 @@ public class MainActivity extends AppCompatActivity {
                                  new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                                      @Override
                                      public void run() {
-                                         Log.e("Delay3 **", String.valueOf(volume));
-                                         stopPlaying();
-                                         volume = 1;
+                                         volume = (float) 0.25;
                                          player.setVolume(volume);
+                                         Log.e("Delay3 **", String.valueOf(volume));
+                                         new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                                             @Override
+                                             public void run() {
+                                                 Log.e("Delay4 **", String.valueOf(volume));
+                                                 stopPlaying();
+                                                 volume = 1;
+                                                 player.setVolume(volume);
+                                             }
+                                         }, 5000);
                                      }
                                  }, 2000);
                              }
