@@ -224,29 +224,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SleepTimer() {
-        new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
+        new CountDownTimer(sleepTimer * 1 * 1000, 1000) {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
 //                 startFadeOut();
-                 deltaVolume = (float) 0.25;
+//                 deltaVolume = (float) 0.25;
+                 volume = (float) 0.8;
+                 player.setVolume(volume);
                  Log.e("initial **", String.valueOf(volume));
                  new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                      @Override
                      public void run() {
-                         volume -= deltaVolume;
-                         player.setVolume(volume);
                          Log.e("Delay **", String.valueOf(volume));
+                         volume = (float) 0.6;
+                         player.setVolume(volume);
                          new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                              @Override
                              public void run() {
                                  Log.e("Delay2 **", String.valueOf(volume));
+                                 volume = (float) 0.4;
+                                 player.setVolume(volume);
                                  new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                                      @Override
                                      public void run() {
-                                         volume = (float) 0.25;
-                                         player.setVolume(volume);
                                          Log.e("Delay3 **", String.valueOf(volume));
+                                         volume = (float) 0.2;
+                                         player.setVolume(volume);
                                          new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                                              @Override
                                              public void run() {
@@ -255,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                                                  volume = 1;
                                                  player.setVolume(volume);
                                              }
-                                         }, 5000);
+                                         }, 3000);
                                      }
                                  }, 2000);
                              }
