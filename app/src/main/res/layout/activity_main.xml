@@ -21,8 +21,8 @@
 
     <ToggleButton
         android:id="@+id/play_mel"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="32dp"
@@ -33,23 +33,39 @@
         app:layout_constraintBottom_toTopOf="@id/play_rn"
         app:layout_constraintEnd_toStartOf="@id/play_rrr"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/button_settings" />
 
     <ToggleButton
         android:id="@+id/play_rn"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:background="@drawable/radio_national"
         android:textAllCaps="false"
         android:textOff=""
         android:textOn=""
-        app:layout_constraintBottom_toTopOf="@+id/now_playing_text"
-        app:layout_constraintEnd_toStartOf="@id/play_pbs"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/play_news"
+        app:layout_constraintEnd_toEndOf="@id/play_mel"
+        app:layout_constraintStart_toStartOf="@id/play_mel"
         app:layout_constraintTop_toBottomOf="@id/play_mel" />
+
+    <ToggleButton
+        android:id="@+id/play_news"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/radio_news"
+        android:textAllCaps="false"
+        android:textOff=""
+        android:textOn=""
+        app:layout_constraintBottom_toTopOf="@+id/now_playing_text"
+        app:layout_constraintEnd_toEndOf="@id/play_rn"
+        app:layout_constraintStart_toStartOf="@id/play_rn"
+        app:layout_constraintTop_toBottomOf="@id/play_rn" />
 
     <ToggleButton
         android:id="@+id/play_rrr"

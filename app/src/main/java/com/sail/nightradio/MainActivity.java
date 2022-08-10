@@ -33,7 +33,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     public ExoPlayer player;
-    private String url, urlMel, urlRN, urlRRR, urlPBS;
+    private String url, urlMel, urlRN, urlNews, urlRRR, urlPBS;
     Boolean flagPlaying = false;
     int sleepTimer = 45;  // minutes
     TextView mNowPlayingShowText;
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         urlMel = "http://live-radio01.mediahubaustralia.com/3LRW/mp3";
         urlRN = "http://live-radio01.mediahubaustralia.com/2RNW/mp3";
+        urlNews ="http://www.abc.net.au/res/streaming/audio/mp3/news_radio.pls";
         urlRRR = "http://realtime.rrr.org.au/p13";
         urlPBS = "https://playerservices.streamtheworld.com/api/livestream-redirect/3PBS_FMAAC.m3u8";
 
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ToggleButton btnMel = findViewById(R.id.play_mel);
         final ToggleButton btnRN = findViewById(R.id.play_rn);
+        final ToggleButton btnNews = findViewById(R.id.play_news);
         final ToggleButton btnRRR = findViewById(R.id.play_rrr);
         final ToggleButton btnPBS = findViewById(R.id.play_pbs);
         btnPlayStop = findViewById(R.id.play_button);
@@ -114,6 +116,21 @@ public class MainActivity extends AppCompatActivity {
 
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_national);
                 mNowPlayingText.setText("ABC Radio National");
+                url = urlRN;
+                if (flagPlaying){
+                    stopPlaying();
+                }
+                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                playRadio(url);
+            }
+        });
+
+        btnNews.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                mNowPlayingLogo.setBackgroundResource(R.drawable.radio_news);
+                mNowPlayingText.setText("ABC News Radio");
                 url = urlRN;
                 if (flagPlaying){
                     stopPlaying();
