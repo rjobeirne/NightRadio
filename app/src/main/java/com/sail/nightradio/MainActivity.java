@@ -8,7 +8,10 @@ import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -18,23 +21,28 @@ import android.widget.ToggleButton;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import wseemann.media.FFmpegMediaMetadataRetriever;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private MediaPlayer mediaPlayer;
     public ExoPlayer player;
-    private String url, urlMel, urlRN, urlRRR, urlPBS;
+    private String url, urlMel, urlRN, urlNews, urlRRR, urlPBS;
     Boolean flagPlaying = false;
     int sleepTimer = 45;  // minutes
     TextView mNowPlayingShowText;
     String nameShow;
     private ImageButton settingsBtn;
     Boolean sleepFunction;
+    float volume = 1;
+    float deltaVolume;
+    ToggleButton btnPlayStop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         urlMel = "http://live-radio01.mediahubaustralia.com/3LRW/mp3";
         urlRN = "http://live-radio01.mediahubaustralia.com/2RNW/mp3";
+        urlNews ="http://www.abc.net.au/res/streaming/audio/mp3/news_radio.pls";
         urlRRR = "http://realtime.rrr.org.au/p13";
         urlPBS = "https://playerservices.streamtheworld.com/api/livestream-redirect/3PBS_FMAAC.m3u8";
 
@@ -57,9 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
         final ToggleButton btnMel = findViewById(R.id.play_mel);
         final ToggleButton btnRN = findViewById(R.id.play_rn);
+        final ToggleButton btnNews = findViewById(R.id.play_news);
         final ToggleButton btnRRR = findViewById(R.id.play_rrr);
         final ToggleButton btnPBS = findViewById(R.id.play_pbs);
-        final ToggleButton btnPlayStop = findViewById(R.id.play_button);
+        btnPlayStop = findViewById(R.id.play_button);
 
         settingsBtn = findViewById(R.id.button_settings);
 
@@ -106,6 +116,21 @@ public class MainActivity extends AppCompatActivity {
 
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_national);
                 mNowPlayingText.setText("ABC Radio National");
+                url = urlRN;
+                if (flagPlaying){
+                    stopPlaying();
+                }
+                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                playRadio(url);
+            }
+        });
+
+        btnNews.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                mNowPlayingLogo.setBackgroundResource(R.drawable.radio_news);
+                mNowPlayingText.setText("ABC News Radio");
                 url = urlRN;
                 if (flagPlaying){
                     stopPlaying();
@@ -182,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         player.prepare();
         player.play();
         flagPlaying = true;
+        SleepTimer();
 
         // load data file
         FFmpegMediaMetadataRetriever metaRetriever = new FFmpegMediaMetadataRetriever();
@@ -210,15 +236,53 @@ public class MainActivity extends AppCompatActivity {
         if(player!=null){
             player.stop();
             flagPlaying = false;
+            btnPlayStop.setBackgroundResource(R.drawable.outline_play_circle_24);
         }
     }
 
     public void SleepTimer() {
-        new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
+        new CountDownTimer(sleepTimer * 1 * 1000, 1000) {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
-                 stopPlaying();
+//                 startFadeOut();
+//                 deltaVolume = (float) 0.25;
+                 volume = (float) 0.8;
+                 player.setVolume(volume);
+                 Log.e("initial **", String.valueOf(volume));
+                 new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                     @Override
+                     public void run() {
+                         Log.e("Delay **", String.valueOf(volume));
+                         volume = (float) 0.6;
+                         player.setVolume(volume);
+                         new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                             @Override
+                             public void run() {
+                                 Log.e("Delay2 **", String.valueOf(volume));
+                                 volume = (float) 0.4;
+                                 player.setVolume(volume);
+                                 new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                                     @Override
+                                     public void run() {
+                                         Log.e("Delay3 **", String.valueOf(volume));
+                                         volume = (float) 0.2;
+                                         player.setVolume(volume);
+                                         new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                                             @Override
+                                             public void run() {
+                                                 Log.e("Delay4 **", String.valueOf(volume));
+                                                 stopPlaying();
+                                                 volume = 1;
+                                                 player.setVolume(volume);
+                                             }
+                                         }, 3000);
+                                     }
+                                 }, 2000);
+                             }
+                         }, 2000);
+                     }
+                 }, 2000);
              }
          }.start();
     }
@@ -228,6 +292,56 @@ public class MainActivity extends AppCompatActivity {
         stopPlaying();
         finish();
     }
+
+    public void startFadeOut(){
+
+        // The duration of the fade
+        final int FADE_DURATION = 3000;
+
+        // The amount of time between volume changes. The smaller this is, the smoother the fade
+        final int FADE_INTERVAL = 250;
+
+        // Calculate the number of fade steps
+        int numberOfSteps = FADE_DURATION / FADE_INTERVAL;
+
+        // Calculate by how much the volume changes each step
+        final float deltaVolume = volume / numberOfSteps;
+
+        // Create a new Timer and Timer task to run the fading outside the main UI thread
+        final Timer timer = new Timer(true);
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                //Do a fade step
+//                fadeOutStep(deltaVolume);
+        player.setVolume(volume);
+        volume -= deltaVolume;
+
+                //Cancel and Purge the Timer if the desired volume has been reached
+                if(volume <= 0){
+                    timer.cancel();
+                    timer.purge();
+                    stopPlaying();
+                }
+            }
+        };
+
+        timer.schedule(timerTask,FADE_INTERVAL,FADE_INTERVAL);
+    }
+
+    private void fadeOutStep(float deltaVolume){
+        player.setVolume(volume);
+        volume -= deltaVolume;
+    }
+
+
+    // Only required for reader app
+//    @Override
+//    public void onBackPressed() {
+//        stopPlaying();
+//        finish();
+//    }
 
     public void shortClick() {
         Toast toast = Toast.makeText(this, "Long click to get to Settings", Toast.LENGTH_LONG);
