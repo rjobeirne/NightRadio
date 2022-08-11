@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -64,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
         TextView mNowPlayingText = findViewById(R.id.now_playing_text);
         mNowPlayingShowText = findViewById(R.id.now_playing_text_show);
 
-        final ToggleButton btnMel = findViewById(R.id.play_mel);
-        final ToggleButton btnRN = findViewById(R.id.play_rn);
-        final ToggleButton btnNews = findViewById(R.id.play_news);
-        final ToggleButton btnRRR = findViewById(R.id.play_rrr);
-        final ToggleButton btnPBS = findViewById(R.id.play_pbs);
+        final ImageButton btnMel = findViewById(R.id.play_mel);
+        final ImageButton btnRN = findViewById(R.id.play_rn);
+        final ImageButton btnNews = findViewById(R.id.play_news);
+        final ImageButton btnRRR = findViewById(R.id.play_rrr);
+        final ImageButton btnPBS = findViewById(R.id.play_pbs);
         btnPlayStop = findViewById(R.id.play_button);
 
         settingsBtn = findViewById(R.id.button_settings);
@@ -95,62 +96,62 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnMel.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnMel.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+            public void onClick(View v) {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_melbourne);
                 mNowPlayingText.setText("ABC Radio 774");
                 url = urlMel;
-                    btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
-                    playRadio(url);
+                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                stopPlaying();
+                playRadio(url);
             }
         });
 
-        btnRN.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnRN.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+            public void onClick(View v) {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_national);
                 mNowPlayingText.setText("ABC Radio National");
                 url = urlRN;
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                stopPlaying();
                 playRadio(url);
             }
         });
 
-        btnNews.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnNews.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+            public void onClick(View v) {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_news);
                 mNowPlayingText.setText("ABC News Radio");
                 url = urlRN;
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                stopPlaying();
                 playRadio(url);
             }
         });
 
-        btnRRR.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnRRR.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+            public void onClick(View v) {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.rrr);
                 mNowPlayingText.setText("3RRR");
                 url = urlRRR;
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                stopPlaying();
                 playRadio(url);
             }
         });
 
-        btnPBS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        btnPBS.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+            public void onClick(View v) {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.pbs);
                 mNowPlayingText.setText("3PBS");
                 url = urlPBS;
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                stopPlaying();
                 playRadio(url);
             }
         });
@@ -178,10 +179,15 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         sleepFunction = sharedPreferences.getBoolean("prefs_sleep_function",Boolean.parseBoolean("TRUE"));
         sleepTimer = Integer.parseInt(sharedPreferences.getString("prefs_listen_time", "45"));
+            Log.e("** sleep function", String.valueOf(sleepFunction));
     }
 
     public void playRadio(String url) {
         if (!flagPlaying) {
+            if (sleepFunction) {
+                Log.e("** sleep function2", String.valueOf(sleepFunction));
+                SleepTimer();
+            }
             MediaItem mediaItem = new MediaItem.Builder()
                     .setUri(url)
                     .setLiveConfiguration(
@@ -193,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
             player.prepare();
             player.play();
             flagPlaying = true;
-            SleepTimer();
         }
 
         // load data file
@@ -207,9 +212,6 @@ public class MainActivity extends AppCompatActivity {
             nameShow = null;
         }
         mNowPlayingShowText.setText(nameShow);
-        if (sleepFunction) {
-            SleepTimer();
-        }
     }
 
     public void pauseRadio() {
@@ -316,12 +318,6 @@ public class MainActivity extends AppCompatActivity {
 
         timer.schedule(timerTask,FADE_INTERVAL,FADE_INTERVAL);
     }
-
-    private void fadeOutStep(float deltaVolume){
-        player.setVolume(volume);
-        volume -= deltaVolume;
-    }
-
 
     // Only required for reader app
 //    @Override
