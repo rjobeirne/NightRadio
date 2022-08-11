@@ -102,11 +102,8 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_melbourne);
                 mNowPlayingText.setText("ABC Radio 774");
                 url = urlMel;
-                if (flagPlaying){
-                    stopPlaying();
-                }
-                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
-                playRadio(url);
+                    btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
+                    playRadio(url);
             }
         });
 
@@ -117,9 +114,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_national);
                 mNowPlayingText.setText("ABC Radio National");
                 url = urlRN;
-                if (flagPlaying){
-                    stopPlaying();
-                }
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 playRadio(url);
             }
@@ -132,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_news);
                 mNowPlayingText.setText("ABC News Radio");
                 url = urlRN;
-                if (flagPlaying){
-                    stopPlaying();
-                }
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 playRadio(url);
             }
@@ -147,9 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.rrr);
                 mNowPlayingText.setText("3RRR");
                 url = urlRRR;
-                if (flagPlaying){
-                    stopPlaying();
-                }
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 playRadio(url);
             }
@@ -162,9 +150,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.pbs);
                 mNowPlayingText.setText("3PBS");
                 url = urlPBS;
-                if (flagPlaying){
-                    stopPlaying();
-                }
                 btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 playRadio(url);
             }
@@ -196,18 +181,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void playRadio(String url) {
-        MediaItem mediaItem = new MediaItem.Builder()
-                .setUri(url)
-                .setLiveConfiguration(
-                    new MediaItem.LiveConfiguration.Builder()
-                        .setMaxPlaybackSpeed(1.02f)
-                        .build())
-                .build();
-        player.setMediaItem(mediaItem);
-        player.prepare();
-        player.play();
-        flagPlaying = true;
-        SleepTimer();
+        if (!flagPlaying) {
+            MediaItem mediaItem = new MediaItem.Builder()
+                    .setUri(url)
+                    .setLiveConfiguration(
+                            new MediaItem.LiveConfiguration.Builder()
+                                    .setMaxPlaybackSpeed(1.02f)
+                                    .build())
+                    .build();
+            player.setMediaItem(mediaItem);
+            player.prepare();
+            player.play();
+            flagPlaying = true;
+            SleepTimer();
+        }
 
         // load data file
         FFmpegMediaMetadataRetriever metaRetriever = new FFmpegMediaMetadataRetriever();
