@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton settingsBtn;
     Boolean sleepFunction;
     float volume = 1;
-    float deltaVolume;
     ToggleButton btnPlayStop;
 
     @Override
@@ -102,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_melbourne);
                 mNowPlayingText.setText("ABC Radio 774");
                 url = urlMel;
-                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 stopPlaying();
                 playRadio(url);
             }
@@ -114,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_national);
                 mNowPlayingText.setText("ABC Radio National");
                 url = urlRN;
-                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 stopPlaying();
                 playRadio(url);
             }
@@ -126,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.radio_news);
                 mNowPlayingText.setText("ABC News Radio");
                 url = urlRN;
-                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 stopPlaying();
                 playRadio(url);
             }
@@ -138,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.rrr);
                 mNowPlayingText.setText("3RRR");
                 url = urlRRR;
-                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 stopPlaying();
                 playRadio(url);
             }
@@ -150,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
                 mNowPlayingLogo.setBackgroundResource(R.drawable.pbs);
                 mNowPlayingText.setText("3PBS");
                 url = urlPBS;
-                btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
                 stopPlaying();
                 playRadio(url);
             }
@@ -188,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("** sleep function2", String.valueOf(sleepFunction));
                 SleepTimer();
             }
+            btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
             MediaItem mediaItem = new MediaItem.Builder()
                     .setUri(url)
                     .setLiveConfiguration(
@@ -230,12 +225,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void SleepTimer() {
-        new CountDownTimer(sleepTimer * 1 * 1000, 1000) {
+        new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
              public void onTick(long millisUntilFinished) {
              }
              public void onFinish() {
-//                 startFadeOut();
-//                 deltaVolume = (float) 0.25;
                  volume = (float) 0.8;
                  player.setVolume(volume);
                  Log.e("initial **", String.valueOf(volume));
