@@ -24,7 +24,6 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="32dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/radio_melbourne"
         android:textAllCaps="false"
@@ -56,8 +55,8 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="48dp"
         android:background="@drawable/radio_news"
         android:textAllCaps="false"
         android:textOff=""
@@ -88,7 +87,7 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_centerInParent="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/pbs"
         android:textAllCaps="false"
@@ -121,6 +120,17 @@
         app:layout_constraintEnd_toStartOf="@id/play_button"
         app:layout_constraintStart_toEndOf="@id/now_playing"
         app:layout_constraintTop_toTopOf="@id/now_playing" />
+
+    <TextView
+        android:id="@+id/sleep_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center_vertical"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/now_playing_text"
+        app:layout_constraintStart_toStartOf="@id/now_playing_text"
+        app:layout_constraintEnd_toEndOf="@id/now_playing_text" />
 
 
     <TextView

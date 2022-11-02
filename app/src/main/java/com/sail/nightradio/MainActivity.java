@@ -29,6 +29,7 @@ import wseemann.media.FFmpegMediaMetadataRetriever;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -38,11 +39,15 @@ public class MainActivity extends AppCompatActivity {
     Boolean flagPlaying = false;
     int sleepTimer = 45;  // minutes
     TextView mNowPlayingShowText;
+    TextView mClockTextView;
+    TextView resetClock;
     String nameShow;
     private ImageButton settingsBtn;
     Boolean sleepFunction;
     float volume = 1;
     ToggleButton btnPlayStop;
+    long timeRemain;
+    CountDownTimer countDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         View mNowPlayingLogo = findViewById(R.id.now_playing);
         TextView mNowPlayingText = findViewById(R.id.now_playing_text);
         mNowPlayingShowText = findViewById(R.id.now_playing_text_show);
+        mClockTextView = findViewById(R.id.sleep_time);
 
         final ImageButton btnMel = findViewById(R.id.play_mel);
         final ImageButton btnRN = findViewById(R.id.play_rn);
@@ -70,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         final ImageButton btnRRR = findViewById(R.id.play_rrr);
         final ImageButton btnPBS = findViewById(R.id.play_pbs);
         btnPlayStop = findViewById(R.id.play_button);
+        resetClock = findViewById(R.id.sleep_time);
 
         settingsBtn = findViewById(R.id.button_settings);
 
@@ -164,6 +171,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+         resetClock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    ResetTimer();
+            }
+        });
     }
 
     @Override
@@ -194,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             player.prepare();
             player.play();
             flagPlaying = true;
+            countDownTimer.start();
         }
 
         // load data file
@@ -213,6 +228,8 @@ public class MainActivity extends AppCompatActivity {
        if(player!=null) {
            player.pause();
            flagPlaying = false;
+           ResetTimer();
+           countDownTimer.cancel();
        }
     }
 
@@ -224,9 +241,27 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void showClock(long timeRemain) {
+        String clockDisplay = String.format("%02d '"
+//                        + " %02d\""
+                , TimeUnit.SECONDS.toMinutes(timeRemain) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeRemain))
+//                , TimeUnit.SECONDS.toSeconds(timeRemain) -
+//                        TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeRemain))
+        );
+
+        if (flagPlaying) {
+            mClockTextView.setText(clockDisplay);
+        } else {
+            mClockTextView.setText("");
+        }
+    }
+
     public void SleepTimer() {
-        new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
+        countDownTimer = new CountDownTimer(sleepTimer * 60 * 1000, 1000) {
              public void onTick(long millisUntilFinished) {
+                 timeRemain = (millisUntilFinished / 1000);
+                 showClock(timeRemain);
              }
              public void onFinish() {
                  volume = (float) 0.8;
@@ -267,6 +302,13 @@ public class MainActivity extends AppCompatActivity {
                  }, 2000);
              }
          }.start();
+    }
+
+    public void ResetTimer() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer.start();
+        }
     }
 
     @Override
