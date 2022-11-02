@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     Boolean sleepFunction;
     float volume = 1;
     ToggleButton btnPlayStop;
-    long timeRemain;
     CountDownTimer countDownTimer;
+    long timeRemain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
             if (sleepFunction) {
                 Log.e("** sleep function2", String.valueOf(sleepFunction));
                 SleepTimer();
+                countDownTimer.start();
             }
             btnPlayStop.setBackgroundResource(R.drawable.outline_pause_circle_24);
             MediaItem mediaItem = new MediaItem.Builder()
@@ -208,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
             player.prepare();
             player.play();
             flagPlaying = true;
-            countDownTimer.start();
         }
 
         // load data file
@@ -229,7 +229,9 @@ public class MainActivity extends AppCompatActivity {
            player.pause();
            flagPlaying = false;
            ResetTimer();
-           countDownTimer.cancel();
+           if (sleepFunction) {
+               countDownTimer.cancel();
+           }
        }
     }
 
@@ -242,16 +244,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showClock(long timeRemain) {
-        String clockDisplay = String.format("%02d '"
+        if (sleepFunction) {
+            String clockDisplay = String.format("%02d '"
 //                        + " %02d\""
-                , TimeUnit.SECONDS.toMinutes(timeRemain) -
-                        TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeRemain))
+                    , TimeUnit.SECONDS.toMinutes(timeRemain) -
+                            TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(timeRemain))
 //                , TimeUnit.SECONDS.toSeconds(timeRemain) -
 //                        TimeUnit.MINUTES.toSeconds(TimeUnit.SECONDS.toMinutes(timeRemain))
-        );
+            );
 
-        if (flagPlaying) {
-            mClockTextView.setText(clockDisplay);
+            if (flagPlaying) {
+                mClockTextView.setText(clockDisplay);
+            } else {
+                mClockTextView.setText("");
+            }
         } else {
             mClockTextView.setText("");
         }
